@@ -2,6 +2,9 @@ class Maclease::Base
 
   def initialize(args={})
     super()
+    if args.is_a?(Hash)
+      args.keys.each {|key| eval("@#{key} = args[key]") }
+    end
   end
 
   def to_hash

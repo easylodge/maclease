@@ -1,12 +1,11 @@
-module InterfiCapital
+module Maclease
   class Configuration
-    attr_accessor :url, :api_key, :username, :password
+    attr_accessor :url, :consumer_key, :consumer_secret
 
     def initialize(args = {})
-      @url = args[:url] || ENV['INTERFI_CAPITAL_URL']
-      @api_key = args[:api_key] || ENV['INTERFI_CAPITAL_API_KEY']
-      @username = args[:username] || ENV['INTERFI_CAPITAL_USERNAME']
-      @password = args[:password] || ENV['INTERFI_CAPITAL_PASSWORD']
+      @url = args[:url] || ENV['MACLEASE_URL']
+      @consumer_key = args[:consumer_key] || ENV['MACLEASE_CONSUMER_KEY']
+      @consumer_secret = args[:consumer_secret] || ENV['MACLEASE_CONSUMER_SECRET']
     end
   end
 end

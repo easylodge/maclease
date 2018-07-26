@@ -1,6 +1,6 @@
 require 'rails'
 
-module InterfiCapital
+module Maclease
   class Railtie < Rails::Railtie
 	 railtie_name :maclease
   end
