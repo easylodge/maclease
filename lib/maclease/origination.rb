@@ -13,23 +13,31 @@ class Maclease::Origination
 
   def encode_authentication
     valid_credentials?
-    @encoded_authorisation = Base64.encode64("#{@consumer_key}:#{@consumer_secret}").strip
+    @encoded_authorisation = Base64.encode64("#{@consumer_key}:#{@consumer_secret}").gsub("\n", '').strip
+  end
+
+  def get_vehicle_guide
+    retrieve("#{Maclease::REQUEST_BASE_URL}/vehicle_guide/years")
   end
 
   def get_quote(data)
-    originate("/quotes", data)
+    originate("#{Maclease::REQUEST_BASE_URL}/quotes", data)
   end
 
   def create_application(data)
-    originate("/applications", data)
+    originate("#{Maclease::REQUEST_BASE_URL}/applications", data)
   end
 
   def upload_document(data)
-    originate("/documents", data)
+    originate("#{Maclease::REQUEST_BASE_URL}/documents", data)
   end
 
   def originate(endpoint, data)
     post(Maclease.configuration.url + endpoint, data.to_hash)
+  end
+
+  def retrieve(endpoint)
+    get(Maclease.configuration.url + endpoint)
   end
 
   private
@@ -42,6 +50,7 @@ class Maclease::Origination
         req.headers['Content-Type'] = 'application/json'
         req.headers['Accept-Encoding'] = 'gzip, deflate'
         req.headers['Authorization'] = "Bearer #{authorization_token}"
+        req.headers['access_token'] = '612-8d114908eb48'
         req.body = data.to_json
       end
 
@@ -65,13 +74,12 @@ class Maclease::Origination
     result = nil
     response = nil
     begin
-      url = "#{Maclease.configuration.url}/oauth20/token"
-      data = { scope: 'leasing', grant_type: "client_credentials" }
+      url = "#{Maclease.configuration.url}#{Maclease::AUTH_BASE_URL}/oauth20/token"
       response = external_connection(url).post do |req|
         req.headers['Content-Type'] = 'application/json'
         req.headers['Accept-Encoding'] = 'gzip, deflate'
         req.headers['Authorization'] = "Basic #{@encoded_authorisation}"
-        req.body = data.to_json
+        req.params = { scope: 'leasing', grant_type: "client_credentials" }
       end
       result = JSON.parse(response.body)
 
@@ -79,12 +87,32 @@ class Maclease::Origination
         http_rescue(result)
       end
 
-      result["access_token"]
+      result['access_token']
     rescue ::JSON::ParserError => e
       json_rescue(e, response)
     rescue ::Faraday::ClientError => e
       http_rescue(e)
     end
+  end
+
+  def get(url)
+    result = nil
+    response = nil
+    begin
+      response = external_connection(url).get do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.headers['Accept-Encoding'] = 'gzip, deflate'
+        req.headers['Authorization'] = "Bearer #{authorization_token}"
+      end
+
+      result = ::JSON.parse(response.body)
+    rescue ::JSON::ParserError => e
+      json_rescue(e, response)
+    rescue ::Faraday::ClientError => e
+      http_rescue(e)
+    end
+
+    return result
   end
 
 
@@ -97,7 +125,7 @@ class Maclease::Origination
   end
 
   def http_rescue(error)
-    raise Maclease::ServerError.new(error.response), error.message
+    raise Maclease::ServerError.new(error["error"]), error["message"], error["code"]
   end
 
   def json_rescue(error, response)

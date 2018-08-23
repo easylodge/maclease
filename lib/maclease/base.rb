@@ -2,9 +2,6 @@ class Maclease::Base
 
   def initialize(args={})
     super()
-    if args.is_a?(Hash)
-      args.keys.each {|key| eval("@#{key} = args[key]") }
-    end
   end
 
   def to_hash
@@ -21,9 +18,9 @@ class Maclease::Base
             el
           end
         }
-        hash[camel_case(var.to_s)] = converted
+        hash[underscore(var.to_s)] = converted
       else
-        hash[camel_case(var.to_s)] = value
+        hash[underscore(var.to_s)] = value
       end
     end
     return hash
@@ -46,9 +43,8 @@ class Maclease::Base
 
   private
 
-  def camel_case(str)
-    return str if str !~ /_/ && str =~ /[A-Z]+.*/
-    str.tr('@','').split('_').map{|e| e.capitalize}.join
+  def underscore(str)
+    str.tr('@','').gsub(/::/, '/').gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').gsub(/([a-z\d])([A-Z])/,'\1_\2').tr("-", "_").downcase
   end
 
 end

@@ -6,9 +6,9 @@ class Maclease::Individual < Maclease::Base
   attr_accessor :landlord_name, :landlord_phone, :au_residency_status, :customer_number, :sole_trader, :guarantor_flag
   attr_accessor :employment, :same_applicant_addr, :address, :mailing_address, :previous_address, :marketing_excl_flag, :financial_statement
 
-  LICENSE_TYPE = %w(FULL PROVISIONAL LEARNER HEAVY_VEHICLE NONE).freeze
+  LICENCE_TYPE = %w(FULL PROVISIONAL LEARNER HEAVY_VEHICLE NONE).freeze
 
-  LICENSE_STATE = %w(NEW_SOUTH_WALES VICTORIA QUEENSLAND SOUTH_AUSTRALIA WESTERN_AUSTRALIA TASMANIA AUSTRALIAN_CAPITAL_TERRITORY NORTHERN_TERRITORY OVERSEAS).freeze
+  LICENCE_STATE = %w(NEW_SOUTH_WALES VICTORIA QUEENSLAND SOUTH_AUSTRALIA WESTERN_AUSTRALIA TASMANIA AUSTRALIAN_CAPITAL_TERRITORY NORTHERN_TERRITORY OVERSEAS).freeze
 
   AU_RESIDENCY_STATUS = %w(CITIZEN PERMANENT_RESIDENT VISA)
 

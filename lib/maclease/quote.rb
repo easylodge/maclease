@@ -10,6 +10,10 @@ class Maclease::Quote < Maclease::Base
 
   FINANCE_TYPE = %w(CONSUMER_LOAN CHATTEL_MORTGAGE NOVATED_LEASE).freeze
 
+  BROKERAGE_TYPE = %w(AMOUNT RATE).freeze
+
+  SOLVE_FOR = %w(SOLVE_CUSTOMER_RATE SOLVE_BROKERAGE_AMOUNT SOLVE_WITH_BASE_RATE).freeze
+
   CONDITION = %w(NEW USED DEMO).freeze
 
   RESIDUAL_MODE = %w(SAVINGS TRADE_IN_OR_SELL REFINANCE OTHERS).freeze
@@ -21,4 +25,6 @@ class Maclease::Quote < Maclease::Base
   validate_reference_field(:condition)
   validate_reference_field(:residual_mode)
   validate_reference_field(:sale_type)
+  validate_reference_field(:solve_for)
+  validate_reference_field(:brokerage_type)
 end
