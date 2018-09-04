@@ -5,9 +5,10 @@ require 'active_support'
 require 'active_support/core_ext'
 
 class Maclease::Origination
-  def initialize(consumer_key=nil, consumer_secret=nil)
-    @consumer_key = consumer_key || Maclease.configuration.consumer_key
-    @consumer_secret = consumer_secret || Maclease.configuration.consumer_secret
+  def initialize(args = {})
+    @consumer_key = args[:consumer_key] || Maclease.configuration.consumer_key
+    @consumer_secret = args[:consumer_secret] || Maclease.configuration.consumer_secret
+    @api_key = args[:api_key] || Maclease.configuration.api_key
     encode_authentication
   end
 
@@ -50,7 +51,7 @@ class Maclease::Origination
         req.headers['Content-Type'] = 'application/json'
         req.headers['Accept-Encoding'] = 'gzip, deflate'
         req.headers['Authorization'] = "Bearer #{authorization_token}"
-        req.headers['access_token'] = '612-8d114908eb48'
+        req.headers['access_token'] = "#{@api_key}"
         req.body = data.to_json
       end
 

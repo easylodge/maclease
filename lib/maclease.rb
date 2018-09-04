@@ -29,7 +29,7 @@ require 'maclease/quotation'
 require 'maclease/quote'
 require 'maclease/special_asset'
 require 'maclease/supplier'
-require 'maclease/trust_applicant'
+require 'maclease/trust'
 require 'maclease/vehicle'
 
 
