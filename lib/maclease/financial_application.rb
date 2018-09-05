@@ -2,7 +2,7 @@ class Maclease::FinancialApplication < Maclease::Base
 
   attr_accessor :privacy_disclosure, :applicants, :assets, :contract_type, :equipment_location, :quotation
   attr_accessor :financial_statement_application, :comment_texts, :asset_subtype, :finance_type, :suppliers
-  attr_accessor :manual_insurers, :guarantors, :campaign_code, :foreseeable_changes, :marital_status
+  attr_accessor :manual_insurers, :guarantors, :campaign_code, :foreseeable_changes, :marital_status, :num_dependents
 
   PRIVACY_DISCLOSURE = %w(YES NO)
 
