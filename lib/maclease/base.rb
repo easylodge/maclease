@@ -9,21 +9,19 @@ class Maclease::Base
     self.instance_variables.each do |var|
       value = self.instance_variable_get var
       if value.class.ancestors.include?(Maclease::Base)
-        value.to_hash
+        hash[underscore(var.to_s)] = value.to_hash
       elsif value.is_a?(Array)
-        converted = value.collect{|el|
-          if el.class.ancestors.include?(Maclease::Base)
-            el.to_hash
-          else
-            el
-          end
-        }
+        converted = array_values_to_hash(value)
         hash[underscore(var.to_s)] = converted
       else
         hash[underscore(var.to_s)] = value
       end
     end
     return hash
+  end
+
+  def array_values_to_hash(array)
+    array.collect{|el| el.class.ancestors.include?(Maclease::Base) ? el.to_hash : el }
   end
 
   # NOTE: we use this to save some work no repetitive field validations that take lists of terms as input.
